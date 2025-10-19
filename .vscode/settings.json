@@ -1,0 +1,14 @@
+{
+    "python.defaultInterpreterPath": "C:\\Users\\lezan\\miniconda3\\envs\\geoML311\\python.exe",
+    "python.terminal.activateEnvironment": true,
+    "terminal.integrated.shellIntegration.enabled": true,
+    "terminal.integrated.defaultProfile.windows": "PowerShell",
+    "python.analysis.extraPaths": [
+        "C:\\Users\\lezan\\miniconda3\\envs\\geoML311\\Lib\\site-packages"
+    ],
+    "python.formatting.provider": "black",
+    "editor.formatOnSave": true,
+    "terminal.integrated.env.windows": {
+        "Path": "C:\\Program Files\\Git\\bin;C:\\Program Files\\Git\\cmd;${env:PATH}"
+    }
+}

@@ -1,0 +1,7 @@
+"python.defaultInterpreterPath" → le dice a VS Code qué Python usar (el de tu entorno geoML311).
+
+"python.terminal.activateEnvironment": true → activa automáticamente el entorno cuando abres un terminal.
+
+"python.analysis.extraPaths" → asegura que VS Code encuentre las librerías instaladas en el entorno.
+
+"python.formatting.provider": "black" y "editor.formatOnSave": true → formatean el código automáticamente al guardar.
