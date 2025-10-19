@@ -1,0 +1,16 @@
+# Entornos virtuales
+geoML311_env.yml
+venv2/
+.env/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# VS Code
+.vscode/
+
+# Archivos temporales
+*.log
