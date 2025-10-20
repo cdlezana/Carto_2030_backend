@@ -5,7 +5,7 @@ const map = L.map("map").setView([-26.1, -60.5], 7);
 L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     {
-        maxZoom: 21,
+        maxZoom: 24,
         attribution: "Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics"
     }
 ).addTo(map);

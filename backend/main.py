@@ -205,3 +205,27 @@ app.mount("/frontend", StaticFiles(directory=FRONTEND_PATH), name="frontend")
 @app.get("/")
 def serve_index():
     return FileResponse(os.path.join(FRONTEND_PATH, "index.html"))
+
+
+
+
+# Detectar entorno (Render o local)
+IS_RENDER = os.getenv("RENDER", "false").lower() == "true"
+
+# Ruta al frontend
+FRONTEND_PATH = os.path.join(os.path.dirname(__file__), "..", "frontend")
+
+# --- Servir frontend ---
+if os.path.exists(FRONTEND_PATH):
+    app.mount("/frontend", StaticFiles(directory=FRONTEND_PATH), name="frontend")
+
+    @app.get("/")
+    def serve_index():
+        index_path = os.path.join(FRONTEND_PATH, "index.html")
+        if os.path.exists(index_path):
+            return FileResponse(index_path)
+        return {"message": "index.html not found"}
+else:
+    @app.get("/")
+    def serve_root():
+        return {"message": "Frontend not found"}
