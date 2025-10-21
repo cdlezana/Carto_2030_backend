@@ -30,5 +30,10 @@ COPY frontend ./frontend
 # Exponer puerto FastAPI
 EXPOSE 8000
 
+# Variables de entorno opcionales para Render
+# Número de workers predeterminado, se puede sobrescribir desde Render
+ENV WORKERS=1
+
 # Comando para correr FastAPI
-CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# En local puedes usar WORKERS=1, en Render puedes setear más
+CMD ["sh", "-c", "uvicorn backend.main:app --host 0.0.0.0 --port 8000 --workers $WORKERS"]

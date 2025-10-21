@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # --- Configuración base ---
 app = FastAPI()
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FRONTEND_PATH = os.path.join(BASE_DIR, "..", "frontend")
+FRONTEND_PATH = os.path.join(BASE_DIR, "../frontend")  # ruta relativa absoluta
 
 # --- Configurar CORS ---
 app.add_middleware(
@@ -19,13 +19,14 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# --- Configuración de conexión a PostgreSQL ---
+# --- Configuración dinámica de conexión a PostgreSQL ---
 DB_CONFIG = {
-    "host": "localhost",
-    "port": 5432,
-    "dbname": "cartocensal_2030",
-    "user": "postgres",
-    "password": "postgres"  # ajusta tu contraseña
+    "host": os.getenv("DB_HOST", "localhost"),
+    "port": int(os.getenv("DB_PORT", 5432)),
+    "dbname": os.getenv("DB_NAME", "cartocensal_2030"),
+    "user": os.getenv("DB_USER", "postgres"),
+    "password": os.getenv("DB_PASSWORD", "postgres"),
+    "sslmode": os.getenv("DB_SSLMODE", "prefer")  # en Render será "require", local "prefer"
 }
 
 # --- Función genérica para convertir tablas a GeoJSON ---
@@ -58,6 +59,7 @@ def obtener_geojson(tabla, campos="id, nam AS nombre, geom", filtro=None):
         return geojson
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error en tabla {tabla}: {str(e)}")
+
 
 # --- Endpoints de capas ---
 @app.get("/api/pjes_censal_2022")
@@ -98,7 +100,7 @@ def listar_capas():
         ]
     }
 
-# --- Endpoint para actualizar estado de Parajes ---
+# --- Endpoint para actualizar estado ---
 @app.post("/api/estado")
 def cambiar_estado(payload: dict):
     try:
@@ -121,17 +123,12 @@ def cambiar_estado(payload: dict):
         print("Error cambiando estado:", e)
         raise HTTPException(status_code=500, detail=str(e))
 
-
 @app.get("/api/departamentos")
 def listar_departamentos():
     try:
         conn = psycopg2.connect(**DB_CONFIG)
         cur = conn.cursor()
-        cur.execute("""
-            SELECT nam 
-            FROM dpto_chaco
-            ORDER BY nam;
-        """)
+        cur.execute("SELECT nam FROM dpto_chaco ORDER BY nam;")
         departamentos = [r[0] for r in cur.fetchall()]
         cur.close()
         conn.close()
@@ -145,7 +142,6 @@ def obtener_kpis(depto: str = "todos"):
     try:
         conn = psycopg2.connect(**DB_CONFIG)
         cur = conn.cursor()
-
         filtro = ""
         if depto.lower() != "todos":
             filtro = f"""WHERE p."CMU" IN (
@@ -199,23 +195,7 @@ def obtener_kpis(depto: str = "todos"):
         print("Error obteniendo KPIs:", e)
         raise HTTPException(status_code=500, detail=str(e))
 
-# --- Servir frontend ---
-app.mount("/frontend", StaticFiles(directory=FRONTEND_PATH), name="frontend")
-
-@app.get("/")
-def serve_index():
-    return FileResponse(os.path.join(FRONTEND_PATH, "index.html"))
-
-
-
-
-# Detectar entorno (Render o local)
-IS_RENDER = os.getenv("RENDER", "false").lower() == "true"
-
-# Ruta al frontend
-FRONTEND_PATH = os.path.join(os.path.dirname(__file__), "..", "frontend")
-
-# --- Servir frontend ---
+# --- Servir frontend y archivos estáticos ---
 if os.path.exists(FRONTEND_PATH):
     app.mount("/frontend", StaticFiles(directory=FRONTEND_PATH), name="frontend")
 

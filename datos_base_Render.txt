@@ -1,0 +1,3 @@
+URL EXTERNA
+
+postgresql://clezana:bOnLufFsz2EZRSbv1bMHqLJBLkFNhxel@dpg-d3pcm7c9c44c73buhg8g-a.oregon-postgres.render.com/carto_censal2030

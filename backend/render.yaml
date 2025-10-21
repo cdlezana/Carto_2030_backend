@@ -1,0 +1,18 @@
+services:
+  - type: web
+    name: carto2030-backend
+    env: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: DB_HOST
+        value: dpg-d3pcm7c9c44c73buhg8g-a.oregon-postgres.render.com
+      - key: DB_PORT
+        value: 5432
+      - key: DB_NAME
+        value: carto_censal2030
+      - key: DB_USER
+        value: clezana
+      - key: DB_PASSWORD
+        value: bOnLufFsz2EZRSbv1bMHqLJBLkFNhxel
