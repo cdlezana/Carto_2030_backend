@@ -2,6 +2,9 @@
 
 // --- Map init ---
 const map = L.map("map").setView([-26.1, -60.5], 7);
+
+// --- Arcgis_ESRI Satellite ---
+/*
 L.tileLayer(
     "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
     {
@@ -9,7 +12,16 @@ L.tileLayer(
         attribution: "Tiles © Esri — Source: Esri, Maxar, Earthstar Geographics"
     }
 ).addTo(map);
+*/
 
+// --- Google Satellite ---
+L.tileLayer(
+    "https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}",
+    {
+        maxZoom: 24,
+        attribution: "Map data © Google"
+    }
+).addTo(map);
 
 // --- Globals ---
 let capasMap = {};
